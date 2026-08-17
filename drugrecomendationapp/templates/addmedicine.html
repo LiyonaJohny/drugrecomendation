@@ -75,7 +75,46 @@
 
 <body>
 
-    {% include 'header.html' %}
+    <nav class="navbar navbar-expand-lg bg-white shadow-lg">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <a class="navbar-brand" href="#">
+                <span class="brand-icon">✚</span>
+                <span>Drug Recommender</span>
+            </a>
+
+          
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/companyhome/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/companyupdation/">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/addmedicine/">Medicine Entry</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/viewmedicine/">Added Medicine</a>
+                    </li>
+                   
+                </ul>
+            </div>
+
+
+            <div class="d-none d-lg-block">
+                <button type="button" class="custom-btn btn btn-danger" data-bs-toggle="modal"><a href="/index/"
+                        style="color: white;">Logout</a></button>
+            </div>
+
+        </div>
+    </nav>
 
     <main>
 
@@ -136,9 +175,9 @@
 
 
     <!-- JAVASCRIPT FILES -->
-    <script src="js/jquery.min.js"></script>
-    <script src="js/bootstrap.bundle.min.js"></script>
-    <script src="js/custom.js"></script>
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/custom.js"></script>
 
 </body>
 

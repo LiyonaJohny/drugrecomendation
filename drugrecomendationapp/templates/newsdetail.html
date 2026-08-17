@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>{{ article.title|default:"News" }} - Drug Recommender</title>
+
+    <!-- CSS FILES -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="/static/css/bootstrap-icons.css" rel="stylesheet">
+
+    <link href="/static/css/tooplate-crispy-kitchen.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        .news-detail-header {
+            background: linear-gradient(135deg, #2c3e50, #4ca1af);
+            text-align: left;
+            padding-top: 5rem;
+            padding-bottom: 3rem;
+        }
+
+        .news-detail-icon {
+            width: 84px;
+            height: 84px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .news-detail-icon i {
+            font-size: 2.2rem;
+            color: #fff;
+        }
+
+        .news-detail-category {
+            display: inline-block;
+            background-color: #f44749;
+            color: white;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .news-detail-date {
+            color: #999;
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .news-detail-body p {
+            color: #444;
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 1.3rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    {% include 'header.html' %}
+
+    <main>
+
+        <header class="site-header news-detail-header">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-10 col-12 mx-auto">
+                        {% if article %}
+                        <div class="news-detail-icon">
+                            <i class="bi {{ article.icon }}"></i>
+                        </div>
+                        <span class="news-detail-category">{{ article.category }}</span>
+                        <h1 class="text-white">{{ article.title }}</h1>
+                        <small class="text-white">{{ article.date }}</small>
+                        {% else %}
+                        <h1 class="text-white">Article not found</h1>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <section class="section-padding">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-12 mx-auto">
+                        {% if article %}
+                        <div class="news-detail-body">
+                            {% for para in article.body %}
+                            <p>{{ para }}</p>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <p>Sorry, we couldn't find that article.</p>
+                        {% endif %}
+
+                        <a href="/index/" class="custom-btn btn btn-danger mt-3">&larr; Back to Home</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    {% include 'footer.html' %}
+
+    <!-- JAVASCRIPT FILES -->
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/custom.js"></script>
+
+</body>
+
+</html>

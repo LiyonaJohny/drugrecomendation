@@ -130,10 +130,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 
 
 import os.path
-STATICFILES_DIRS=((os.path.join(os.path.dirname(__file__),'drugrecomendationapp/static')),)
+STATICFILES_DIRS=((os.path.join(BASE_DIR,'drugrecomendationapp/static')),)
 STATIC_ROOT=os.path.join(BASE_DIR,'static')
-STATICFILES_FFINDERS=(
-    'django.contrib.staticfiles.finders.FileSystemFinders',
+STATICFILES_FINDERS=(
+    'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 

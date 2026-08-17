@@ -73,6 +73,7 @@ urlpatterns = [
     path('givefeedback/',givefeedback,name='givefeedback'),
     path('viewfeedback/',viewfeedback,name='viewfeedback'),
     path('admin_viewfeedback/',admin_viewfeedback,name='admin_viewfeedback'),
+    path('newsdetail/',newsdetail,name='newsdetail'),
 
 
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

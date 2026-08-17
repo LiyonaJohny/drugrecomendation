@@ -838,7 +838,7 @@ def admin_viewfeedback(request):
     cursor = connection.cursor()
     sql = """
         SELECT f.fid, u.uname, f.feedback, f.fdate
-        FROM feedback f 
+        FROM feedback f
         JOIN user u ON f.uid = u.uid
         ORDER BY f.fdate DESC
     """
@@ -854,3 +854,91 @@ def admin_viewfeedback(request):
         }
         fb.append(q)
     return render(request, "admin_viewfeedback.html", {"fb": fb})
+
+
+NEWS_ARTICLES = {
+    '1': {
+        'id': '1',
+        'icon': 'bi-journal-medical',
+        'category': 'Pharmacology',
+        'title': 'Recent FDA Drug Approvals',
+        'date': 'March 15, 2024',
+        'excerpt': 'Discover the latest medications approved by regulatory agencies and their applications in modern healthcare.',
+        'body': [
+            'Regulatory agencies continually review and approve new medications aimed at treating a wide range of conditions, from chronic illnesses to rare diseases. Staying informed about these approvals helps patients and caregivers understand new treatment options as they become available.',
+            'Newly approved drugs typically undergo years of clinical trials to establish safety and efficacy before reaching pharmacy shelves. Once approved, healthcare providers assess how these medications fit into existing treatment plans.',
+            'Patients are encouraged to speak with their doctor or pharmacist about whether a newly approved medication might be a suitable alternative or addition to their current regimen.',
+        ],
+    },
+    '2': {
+        'id': '2',
+        'icon': 'bi-shield-exclamation',
+        'category': 'Safety',
+        'title': 'Drug Interaction Guide',
+        'date': 'March 12, 2024',
+        'excerpt': 'Understanding drug interactions is crucial for safe medication management. Learn what combinations to avoid.',
+        'body': [
+            'Drug interactions occur when one medication affects how another works, which can reduce effectiveness or increase the risk of side effects. Interactions can happen between prescription drugs, over-the-counter medicines, supplements, and even certain foods.',
+            'Common warning signs of a harmful interaction include unusual drowsiness, upset stomach, or a sudden change in how a condition is being managed. Always keep an updated list of everything you take, including vitamins and herbal supplements.',
+            'Pharmacists are a valuable resource for checking potential interactions before starting a new medication, and most pharmacy systems automatically flag known risky combinations.',
+        ],
+    },
+    '3': {
+        'id': '3',
+        'icon': 'bi-heart-fill',
+        'category': 'Treatment',
+        'title': 'Managing Chronic Diseases',
+        'date': 'March 10, 2024',
+        'excerpt': 'Effective medication strategies for long-term disease management and improved quality of life.',
+        'body': [
+            'Living with a chronic condition such as diabetes, hypertension, or asthma often means managing a long-term medication routine alongside lifestyle changes. Consistency is one of the most important factors in keeping symptoms under control.',
+            'Setting reminders, using pill organizers, and scheduling regular check-ins with a healthcare provider can help patients stay on track with their treatment plans.',
+            'Long-term management works best as a partnership between the patient and their care team, with open communication about what is and is not working.',
+        ],
+    },
+    '4': {
+        'id': '4',
+        'icon': 'bi-alarm-fill',
+        'category': 'Wellness',
+        'title': 'Improving Medication Adherence',
+        'date': 'March 08, 2024',
+        'excerpt': 'Tips and strategies to help patients stick to their medication regimens for better health outcomes.',
+        'body': [
+            'Medication adherence, or taking medicine exactly as prescribed, is one of the biggest factors in treatment success. Missed doses or early discontinuation can lead to setbacks in managing a condition.',
+            'Simple strategies like linking doses to daily habits, using a weekly pill box, or setting phone alarms can make a noticeable difference in staying consistent.',
+            'If side effects or cost are making it hard to stick to a regimen, patients should talk to their provider rather than stopping treatment on their own.',
+        ],
+    },
+    '5': {
+        'id': '5',
+        'icon': 'bi-book-half',
+        'category': 'Education',
+        'title': 'Generic vs Brand Name Drugs',
+        'date': 'March 05, 2024',
+        'excerpt': 'Understanding the differences, similarities, and cost implications of generic and brand-name medications.',
+        'body': [
+            'Generic medications contain the same active ingredients as their brand-name counterparts and must meet the same standards for quality, strength, and safety.',
+            'The main difference is usually cost: generics are often significantly cheaper because manufacturers do not need to repeat the original clinical trials or cover the same marketing costs.',
+            'For most patients, switching to a generic version has no impact on treatment effectiveness, though it is always reasonable to ask a pharmacist if there are any specific concerns.',
+        ],
+    },
+    '6': {
+        'id': '6',
+        'icon': 'bi-thermometer-half',
+        'category': 'Health',
+        'title': 'Managing Medication Side Effects',
+        'date': 'March 01, 2024',
+        'excerpt': 'Learn how to identify, prevent, and manage common side effects from your medications safely.',
+        'body': [
+            'Most medications carry some risk of side effects, ranging from mild and temporary to more serious reactions that require medical attention.',
+            'Reading the information leaflet that comes with a prescription and knowing what symptoms to watch for can help patients respond quickly if something feels wrong.',
+            'Any severe or unexpected reaction should be reported to a healthcare provider right away, while milder side effects can often be discussed at the next regular appointment.',
+        ],
+    },
+}
+
+
+def newsdetail(request):
+    nid = request.GET.get('id', '1')
+    article = NEWS_ARTICLES.get(nid)
+    return render(request, "newsdetail.html", {"article": article})
