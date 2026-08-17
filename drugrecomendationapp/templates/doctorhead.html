@@ -75,44 +75,7 @@
 
 <body>
 
-    <nav class="navbar navbar-expand-lg bg-white shadow-lg">
-        <div class="container">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <a class="navbar-brand" href="#">
-                Drug Recommendation
-            </a>
-
-          
-
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav mx-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="/doctorhome/">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/viewdoctor/"> View Profile</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/userlist/">Services</a>
-                    </li>
-                    <!-- <li class="nav-item">
-                        <a class="nav-link" href="/index/">Logout</a>
-                    </li> -->
-                </ul>
-            </div>
-
-
-            <div class="d-none d-lg-block">
-                <button type="button" class="custom-btn btn btn-danger" data-bs-toggle="modal"><a href="/index/"
-                        style="color: white;">Logout</a></button>
-            </div>
-
-        </div>
-    </nav>
+    {% include 'header.html' %}
 
     <main>
 

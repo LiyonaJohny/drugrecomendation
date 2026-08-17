@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Crispy Kitchen - Bootstrap 5 HTML Template</title>
+    <title>Drug Recommender</title>
 
     <!-- CSS FILES -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -75,45 +75,7 @@
 
 <body>
 
-    <nav class="navbar navbar-expand-lg bg-white shadow-lg">
-        <div class="container">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <a class="navbar-brand" href="#">
-                Drug Recommendation
-            </a>
-
-          
-
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav mx-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="/doctorhome/">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/viewdoctor/"> View Profile</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/userlist/">Services</a>
-                    </li>
-                    <!-- <li class="nav-item">
-                        <a class="nav-link" href="/index/">Logout</a>
-                    </li> -->
-                   
-                </ul>
-            </div>
-
-
-            <div class="d-none d-lg-block">
-                <button type="button" class="custom-btn btn btn-danger" data-bs-toggle="modal"><a href="/index/"
-                        style="color: white;">Logout</a></button>
-            </div>
-
-        </div>
-    </nav>
+    {% include 'header.html' %}
 
     <main>
 
@@ -124,7 +86,7 @@
                     <div class="col-lg-5 col-12 m-auto">
                         <div class="heroText">
 
-                            <h1 class="text-white mb-lg-5 mb-3">Drug Recommendation</h1>
+                            <h1 class="text-white mb-lg-5 mb-3">Liyona Johny</h1>
                         </div>
                     </div>
                 </div>
@@ -148,35 +110,7 @@
 
     </main>
 
-    <footer class="site-footer section-padding">
-
-        <div class="container">
-
-            <div class="row">
-
-                <div class="col-12">
-                    <h4 class="text-white mb-4 me-5">Drug Recommender</h4>
-                </div>
-
-        
-          
-
-                <div class="col-lg-4 col-md-6 col-xs-12 tooplate-mt30">
-                   
-
-               
-
-                    <p class="copyright-text tooplate-mt60">Copyright © 2022 Crispy Kitchen Co., Ltd.
-                        <br>Design: <a rel="nofollow" href="https://www.tooplate.com/" target="_blank">Tooplate</a>
-                    </p>
-
-                </div>
-
-            </div><!-- row ending -->
-
-        </div><!-- container ending -->
-
-    </footer>
+    {% include 'footer.html' %}
 
     <!-- Modal -->
 

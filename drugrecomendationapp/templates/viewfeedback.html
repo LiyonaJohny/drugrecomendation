@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Crispy Kitchen - Bootstrap 5 HTML Template</title>
+    <title>Drug Recommender</title>
 
     <!-- CSS FILES -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -75,48 +75,7 @@
 
 <body>
 
-    <nav class="navbar navbar-expand-lg bg-white shadow-lg">
-        <div class="container">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <a class="navbar-brand" href="#">
-                Drug Recommendation
-            </a>
-
-          
-
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav mx-auto">
-                        <li class="nav-item">
-                        <a class="nav-link active" href="/userhome/">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/userupdate/">Profile</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/vmedicine/">Medicines</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/doctorlist/">Doctors</a>
-                    </li>
-                     <li class="nav-item">
-                        <a class="nav-link" href="/givefeedback/">Add Review</a>
-                    </li>
-                   
-                </ul>
-            </div>
-
-
-            <div class="d-none d-lg-block">
-                <button type="button" class="custom-btn btn btn-danger" data-bs-toggle="modal"><a href="/index/"
-                        style="color: white;">Logout</a></button>
-            </div>
-
-        </div>
-    </nav>
+    {% include 'header.html' %}
 
     <main>
 
@@ -186,42 +145,7 @@
 
     </main>
 
-    <footer class="site-footer section-padding">
-
-        <div class="container">
-
-            <div class="row">
-
-                <div class="col-12">
-                    <h4 class="text-white mb-4 me-5">Drug Recommendation</h4>
-                </div>
-
-              
-
-                <div class="col-lg-4 col-md-6 col-xs-12 tooplate-mt30">
-                    <h6 class="text-white mb-lg-4 mb-3">Social</h6>
-
-                    <ul class="social-icon">
-                        <li><a href="#" class="social-icon-link bi-facebook"></a></li>
-
-                        <li><a href="#" class="social-icon-link bi-instagram"></a></li>
-
-                        <li><a href="https://twitter.com/search?q=tooplate.com&src=typed_query&f=live" target="_blank"
-                                class="social-icon-link bi-twitter"></a></li>
-
-                        <li><a href="#" class="social-icon-link bi-youtube"></a></li>
-                    </ul>
-
-                    <p class="copyright-text tooplate-mt60">Copyright © 2024 Drug recommendation Co., Ltd.
-                    </p>
-
-                </div>
-
-            </div><!-- row ending -->
-
-        </div><!-- container ending -->
-
-    </footer>
+    {% include 'footer.html' %}
 
     <!-- Modal -->
 
