@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+    {% load static %}
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <title>Crispy Kitchen - Bootstrap 5 HTML Template</title>
+
+        <!-- CSS FILES -->    
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">                    
+        <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+
+        <link href="/static/css/bootstrap-icons.css" rel="stylesheet">
+
+        <link href="/static/css/tooplate-crispy-kitchen.css" rel="stylesheet">
+        
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <style>
+       
+        .dropdown {
+          float: left;
+          overflow: hidden;
+        }
+        
+        .dropdown .dropbtn {
+          font-size: 16px;  
+          border: none;
+          outline: none;
+          color: rgba(14, 10, 10, 0.633);
+          padding: 14px 16px;
+          background-color: inherit;
+          font-family: inherit;
+          margin: 0;
+        }
+        
+      
+        .dropdown-content {
+          display: none;
+          position: absolute;
+          background-color: #1104046a;
+          min-width: 160px;
+          box-shadow: 0px 8px 16px 0px rgba(246, 244, 244, 0.958);
+          z-index: 1;
+        }
+        
+        .dropdown-content a {
+          float: none;
+          color: black;
+          padding: 12px 16px;
+          text-decoration: none;
+          display: block;
+          text-align: left;
+        }
+        
+        .dropdown-content a:hover {
+          background-color: #05020233;
+        }
+        
+        .dropdown:hover .dropdown-content {
+          display: block;
+        }
+        </style>
+    </head>
+    
+    <body>
+        
+        <nav class="navbar navbar-expand-lg bg-white shadow-lg">
+            <div class="container">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <a class="navbar-brand" href="#">
+                    Drug Recommendation
+                </a>
+
+                <div class="d-lg-none">
+                    <button type="button" class="custom-btn btn btn-danger" data-bs-toggle="modal" data-bs-target="#BookingModal">Reservation</button>
+                </div>
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/index/">Home</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="/userreg/">User Registration</a>
+                        </li>
+                    </ul>
+                </div>
+                        
+            
+                        
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/companyreg/">Company Registration</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="/doctorreg/">Doctor Registration</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="/login/">Login</a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </nav>
+
+        <main>
+
+            <header class="site-header site-contact-header">
+                <div class="container">
+                    <div class="row">
+
+                        <div class="col-lg-10 col-12 mx-auto">
+                            <h1 class="text-white">Company Register</h1>
+
+                            <strong class="text-white">We are happy to get in touch with you</strong>
+                        </div>
+
+                    </div>
+                </div>
+                
+                <div class="overlay"></div>
+            </header>
+
+            <section class="contact section-padding">
+                <div class="container">
+                    <div class="row">
+
+                        <!-- <div class="col-12">
+                            <h2 class="mb-4">Leave a message</h2>
+                        </div> -->
+
+                        <div class="col-lg-9 col-9">
+                            <form class="custom-form contact-form row" action="/companyregistration/" role="form">
+                        
+                                <div class="col-9">
+                                    <label for="company-name" class="form-label">Company Name</label>
+                                    <input type="text" name="name" id="company-name" class="form-control" placeholder="Your Company Name" required>
+                        
+                                    <label for="company-place" class="form-label">Place</label>
+                                    <input type="text" name="place" id="company-place" class="form-control" placeholder="Company Location" required>
+                        
+                                    <label for="company-address" class="form-label">Address</label>
+                                    <textarea name="address" id="company-address" class="form-control" placeholder="Company Address" required></textarea>
+                        
+                                    <label for="company-phone" class="form-label">Phone Number</label>
+                                    <input type="text" name="phone" id="company-phone" class="form-control" placeholder="Your Phone Number" required>
+                        
+                                    <label for="company-email" class="form-label">Email</label>
+                                    <input type="email" name="email" id="company-email" pattern="[^ @]*@[^ @]*" class="form-control" placeholder="Your Email" required>
+                        
+                                    <label for="company-password" class="form-label">Password</label>
+                                    <input type="password" name="pwd" id="company-password" class="form-control" placeholder="Your Password" required>
+                                </div>
+                        
+                                <div class="col-lg-5 col-12 ms-auto">
+                                    <button type="submit" class="form-control">Register</button>
+                                </div>
+                            </form>
+                        </div>
+                        
+
+                     
+
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <footer class="site-footer section-padding">
+            
+            <div class="container">
+                
+                <div class="row">
+
+                    <div class="col-12">
+                        <h4 class="text-white mb-4 me-5">Drug Recommendation</h4>
+                    </div>
+
+                 
+
+                    <div class="col-lg-4 col-md-6 col-xs-12 tooplate-mt30">
+                        <h6 class="text-white mb-lg-4 mb-3">Social</h6>
+
+                        <ul class="social-icon">
+                            <li><a href="#" class="social-icon-link bi-facebook"></a></li>
+
+                            <li><a href="#" class="social-icon-link bi-instagram"></a></li>
+
+                            <li><a href="https://twitter.com/search?q=tooplate.com&src=typed_query&f=live" target="_blank"
+                            	 class="social-icon-link bi-twitter"></a></li>
+
+                            <li><a href="#" class="social-icon-link bi-youtube"></a></li>
+                        </ul>
+                    
+                        <p class="copyright-text tooplate-mt60">Copyright © 2024 Drug recommendation Co., Ltd.
+                        </p>
+                        
+                    </div>
+
+                </div><!-- row ending -->
+                
+             </div><!-- container ending -->
+             
+        </footer>
+
+        <!-- Modal -->
+       
+
+        <!-- JAVASCRIPT FILES -->
+        <script src="js/jquery.min.js"></script>
+        <script src="js/bootstrap.bundle.min.js"></script>
+        <script src="js/custom.js"></script>
+
+    </body>
+</html>
+
+   

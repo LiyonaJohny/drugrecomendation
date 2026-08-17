@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Company Details</h1>
+    <table align="center" border="1" >
+        <tr>
+            <!-- <th>id</th> -->
+            <th>Name</th>
+            <th>Place</th>
+            <th>Address</th>
+            <th>Phonenumber</th>
+            <th>Email</th>
+        </tr>
+        
+        {% for u in use %}
+        <tr>
+            <!-- <td>{{u.cid}}</td> -->
+            <td>{{u.cname}}</td>
+            <td>{{u.place}}</td>
+            <td>{{u.address}}</td>
+            <td>{{u.phonenum}}</td>
+            <td>{{u.email}}</td>
+            <td><a href="/companyupdate?id={{u.cid}}"><button>Update</button></a></td>
+        </tr>
+        {% endfor %}
+    </table>    
+</body>
+</html>
