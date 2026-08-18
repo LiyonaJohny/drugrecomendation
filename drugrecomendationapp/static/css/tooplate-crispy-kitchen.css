@@ -14,6 +14,8 @@ https://www.tooplate.com/view/2129-crispy-kitchen
   --white-color:                  #FFFFFF;
   --primary-color:                #f44749;
   --secondary-color:              #f3af24;
+  --accent-blue:                  #1F6FEB;
+  --accent-blue-dark:             #185CC4;
   --section-bg-color:             #F9F9F9;
   --dark-color:                   #000000;
   --title-color:                  #565758;
@@ -155,6 +157,20 @@ strong {
   color: var(--white-color);
   font-size: var(--menu-font-size);
   padding: 10px 35px;
+}
+
+/* Logout uses Bootstrap's .btn-danger — recolored here to match the
+   site's login/form button blue instead of Bootstrap's default red */
+.btn-danger {
+  background-color: var(--accent-blue) !important;
+  border-color: var(--accent-blue) !important;
+}
+
+.btn-danger:hover,
+.btn-danger:focus,
+.btn-danger:active {
+  background-color: var(--accent-blue-dark) !important;
+  border-color: var(--accent-blue-dark) !important;
 }
 
 
@@ -606,14 +622,14 @@ strong {
 }
 
 .custom-form button[type="submit"] {
-  background: var(--dark-color);
+  background: var(--accent-blue);
   border: 0;
   color: var(--white-color);
   text-transform: uppercase;
 }
 
 .custom-form button[type="submit"]:hover {
-  background: var(--primary-color);
+  background: var(--accent-blue-dark);
 }
 
 

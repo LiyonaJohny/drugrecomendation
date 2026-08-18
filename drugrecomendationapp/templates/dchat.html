@@ -1,143 +1,298 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+{% load static %}
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat Message</title>
-    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Chat with {{ patname }} - Drug Recommender</title>
+
+    <!-- CSS FILES -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="/static/css/bootstrap-icons.css" rel="stylesheet">
+
+    <link href="/static/css/tooplate-crispy-kitchen.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
-        body {
+        .chat-page {
+            padding: 2.5rem 0 3rem;
+            background: var(--section-bg-color);
+            min-height: calc(100vh - 88px);
+        }
+
+        .chat-card {
+            max-width: 760px;
             margin: 0 auto;
-            max-width: 800px;
-            padding: 0 20px;
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 10px 30px rgba(15, 42, 67, 0.08);
+            overflow: hidden;
         }
 
-        a {
-            display: inline-block;
-            margin: 10px 0;
+        .chat-card-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 1.1rem 1.4rem;
+            background: linear-gradient(135deg, #14324c, #1c5270);
+            color: #fff;
+        }
+
+        .chat-avatar {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: var(--accent-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .chat-card-header .back-link {
+            color: #cfe0f2;
+            font-size: 0.85rem;
             text-decoration: none;
-            color: #007bff;
-            font-weight: bold;
         }
 
-        .chat-container {
-            height: 500px;
+        .chat-card-header .back-link:hover {
+            color: #fff;
+        }
+
+        .chat-card-header h1 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin: 0;
+            color: #fff;
+        }
+
+        .chat-card-header p {
+            margin: 0;
+            font-size: 0.8rem;
+            color: #b9cfe3;
+        }
+
+        .chat-box {
+            height: 440px;
             overflow-y: auto;
-            background-color: #222;
-            padding: 15px;
-            border-radius: 10px;
-            color: white;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            padding: 1.4rem;
+            display: flex;
+            flex-direction: column;
+            background: #F7F9FB;
         }
 
-        .container {
-            background-color: #ffffff;
-            border-radius: 15px;
-            padding: 10px;
-            margin: 10px 0;
-            width: 70%;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        .chat-empty {
+            margin: auto;
+            text-align: center;
+            color: var(--p-color);
+        }
+
+        .chat-empty i {
+            font-size: 2rem;
+            color: var(--border-color);
+            display: block;
+            margin-bottom: 0.6rem;
+        }
+
+        .chat-day-sep {
+            text-align: center;
+            font-size: 0.72rem;
+            color: var(--p-color);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin: 0.9rem 0 0.6rem;
+        }
+
+        .bubble-row {
+            display: flex;
+            margin-bottom: 0.55rem;
+        }
+
+        .bubble-row.mine {
+            justify-content: flex-end;
+        }
+
+        .bubble {
+            max-width: 72%;
+            padding: 0.6rem 0.9rem;
+            border-radius: 14px;
+            font-size: 0.95rem;
+            line-height: 1.4;
             word-wrap: break-word;
         }
 
-        .darker {
-            background-color: #d1e7ff;
-            float: right;
-            text-align: right;
+        .bubble .sender {
+            display: block;
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 2px;
+            opacity: 0.75;
         }
 
-        .container::after {
-            content: "";
-            clear: both;
-            display: table;
+        .bubble-row.theirs .bubble {
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-bottom-left-radius: 4px;
+            color: #2b2b2b;
         }
 
-        .container p {
-            margin: 0;
-            padding: 5px;
+        .bubble-row.mine .bubble {
+            background: var(--accent-blue);
+            color: #fff;
+            border-bottom-right-radius: 4px;
         }
 
-        .time-right {
-            float: right;
-            color: #007bff;
-            font-size: 12px;
-        }
-
-        .time-left {
-            float: left;
-            color: #ff9800;
-            font-size: 12px;
-        }
-
-        .chat-input-container {
-            position: sticky;
-            bottom: 0;
-            background-color: white;
-            padding: 10px;
-            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
+        .chat-input-row {
             display: flex;
-            align-items: center;
+            gap: 0.7rem;
+            align-items: flex-end;
+            padding: 1rem 1.4rem;
+            background: #fff;
+            border-top: 1px solid var(--border-color);
         }
 
-        textarea {
-            width: 100%;
-            height: 50px;
-            padding: 10px;
-            border: 2px solid #ccc;
-            border-radius: 10px;
+        .chat-input-row textarea {
+            flex: 1;
             resize: none;
-            font-size: 16px;
+            height: 52px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 0.7rem 0.9rem;
+            font-size: 0.95rem;
+            font-family: inherit;
         }
 
-        .send-btn {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            margin-left: 10px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
+        .chat-input-row textarea:focus {
+            outline: none;
+            border-color: var(--accent-blue);
         }
 
-        .send-btn:hover {
-            background-color: #0056b3;
+        .chat-send-btn {
+            background: var(--accent-blue);
+            border: 0;
+            color: #fff;
+            width: 52px;
+            height: 52px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            flex-shrink: 0;
         }
 
+        .chat-send-btn:hover {
+            background: var(--accent-blue-dark);
+        }
     </style>
 </head>
-<body>
-    
-    <a href="/doctorhome/">🏠 Home</a>  
-    <h2 style="text-align: center;">Chat Message</h2>
-    
-    <div class="chat-container">
-        {% for i in alist %}
-        <span class="time-left">{{ i.chatdate }}</span><br/>
-        {% if i.typ == 'user' %}
-        <div class="container">
-            <p align="left">{{ i.msg }}</p>
-            <span class="time-left">Doctor</span>
-        </div>
-        {% endif %}
-        {% if i.typ == 'doctor' %}
-        <div class="container darker">
-            <p align="right">{{ i.msg }}</p>
-            <span class="time-right">You</span>
-        </div>
-        {% endif %}
-        {% endfor %}
-    </div>
 
-    <!-- Chat Input Box -->
-    <form action="/dchataction/" class="chat-input-container">
-        <input type="hidden" name="uid" value="{{ uid }}">
-        <textarea name="msg" placeholder="Type your message..."></textarea>
-        <button type="submit" class="send-btn">Send</button>
-    </form>
+<body>
+
+    <nav class="navbar navbar-expand-lg bg-white shadow-lg">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <a class="navbar-brand" href="#">
+                <span class="brand-icon">✚</span>
+                <span>Drug Recommender</span>
+            </a>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/doctorhome/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/viewdoctor/"> View Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/userlist/">Services</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="d-none d-lg-block">
+                <a href="/index/" class="custom-btn btn btn-danger" style="color: white;">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="chat-page">
+        <div class="container">
+            <div class="chat-card">
+                <div class="chat-card-header">
+                    <div class="chat-avatar"><i class="bi bi-person"></i></div>
+                    <div class="flex-grow-1">
+                        <h1>{{ patname }}</h1>
+                        <p>Patient consultation thread</p>
+                    </div>
+                    <a href="/userlist/" class="back-link">&larr; Patients list</a>
+                </div>
+
+                <div class="chat-box" id="chatBox">
+                    {% if alist %}
+                        {% for i in alist %}
+                            {% ifchanged i.chatdate %}
+                                <div class="chat-day-sep">{{ i.chatdate }}</div>
+                            {% endifchanged %}
+                            {% if i.typ == 'doctor' %}
+                                <div class="bubble-row mine">
+                                    <div class="bubble">
+                                        <span class="sender">You</span>
+                                        {{ i.msg }}
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="bubble-row theirs">
+                                    <div class="bubble">
+                                        <span class="sender">{{ patname }}</span>
+                                        {{ i.msg }}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <div class="chat-empty">
+                            <i class="bi bi-chat-dots"></i>
+                            No messages yet — reply to start the conversation.
+                        </div>
+                    {% endif %}
+                </div>
+
+                <form action="/dchataction/" method="get" class="chat-input-row">
+                    <input type="hidden" name="uid" value="{{ uid }}">
+                    <textarea name="msg" placeholder="Type your message..." required></textarea>
+                    <button type="submit" class="chat-send-btn"><i class="bi bi-arrow-right"></i></button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        var box = document.getElementById('chatBox');
+        if (box) { box.scrollTop = box.scrollHeight; }
+    </script>
+
+    <!-- JAVASCRIPT FILES -->
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/custom.js"></script>
 
 </body>
+
 </html>

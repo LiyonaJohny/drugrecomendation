@@ -128,40 +128,63 @@ def viewcompany(request):
 
 def userhome(request):
     return render(request,'userhome.html')
+def _stars(rate):
+    try:
+        return max(0, min(5, int(round(float(rate)))))
+    except (TypeError, ValueError):
+        return 0
+
 def vmedicine(request):
     cursor=connection.cursor()
-    
-    s="select * from med_details "
-    print(s)
+
+    s="""
+        SELECT med_details.med_id, med_details.name, med_details.used, med_details.mg,
+               med_details.dosage, med_details.cmp, med_details.effects, med_details.pres,
+               med_details.pack, med_details.image,
+               COALESCE(AVG(review.rating), 0) AS rate,
+               COUNT(review.rid) AS rcount
+        FROM med_details
+        LEFT JOIN review ON review.med_id = med_details.med_id
+        GROUP BY med_details.med_id
+        ORDER BY rate DESC
+    """
     cursor.execute(s)
     rs=cursor.fetchall()
     tk=[]
     for row in rs:
-        q={'med_id':row[0],'name':row[1],'used':row[2],'mg':row[3],'dosage':row[4],'cmp':row[5],'effects':row[6],'pres':row[7],'pack':row[8],'image':row[9]}
+        q={'med_id':row[0],'name':row[1],'used':row[2],'mg':row[3],'dosage':row[4],'cmp':row[5],'effects':row[6],'pres':row[7],'pack':row[8],'image':row[9],'rating':row[10],'rcount':row[11],'filled_stars':_stars(row[10])}
         tk.append(q)
     return render(request,'vmedicine.html',{'tk':tk})
 
 def meddetail(request):
     cursor=connection.cursor()
     mid=request.GET['mid']
-    s="select * from med_details where med_id='%s'"%(mid)
-    print(s)
-    cursor.execute(s)
+    s="""
+        SELECT med_details.med_id, med_details.name, med_details.used, med_details.mg,
+               med_details.dosage, med_details.cmp, med_details.effects, med_details.pres,
+               med_details.pack, med_details.image,
+               COALESCE(AVG(review.rating), 0) AS rate,
+               COUNT(review.rid) AS rcount
+        FROM med_details
+        LEFT JOIN review ON review.med_id = med_details.med_id
+        WHERE med_details.med_id=%s
+        GROUP BY med_details.med_id
+    """
+    cursor.execute(s,[mid])
     rs=cursor.fetchall()
     tk=[]
     for row in rs:
-        q={'med_id':row[0],'name':row[1],'used':row[2],'mg':row[3],'dosage':row[4],'cmp':row[5],'effects':row[6],'pres':row[7],'pack':row[8],'image':row[9]}
+        q={'med_id':row[0],'name':row[1],'used':row[2],'mg':row[3],'dosage':row[4],'cmp':row[5],'effects':row[6],'pres':row[7],'pack':row[8],'image':row[9],'rating':row[10],'rcount':row[11],'filled_stars':_stars(row[10])}
         tk.append(q)
-    s="select * from review where med_id='%s'"%(mid)
-    cursor.execute(s)
-    cursor.execute(s)
+    s="select * from review where med_id=%s order by date desc"
+    cursor.execute(s,[mid])
     rs=cursor.fetchall()
     rv=[]
     for row in rs:
         q={'rid':row[0],'uid':row[1],'med_id':row[2],'date':row[3],'review':row[4],'rating':row[5]}
         rv.append(q)
 
-    return render(request,'meddetail.html',{'tk':tk,'rv':rv})
+    return render(request,'meddetail.html',{'tk':tk,'rv':rv,'mid':mid})
 
 def companyupdation(request):
     cursor=connection.cursor()
@@ -381,9 +404,8 @@ def medupdation(request):
 def smedicine(request):
     cursor = connection.cursor()
     med = request.GET['med']
-    print(med)
 
-    s = f"""
+    s = """
         SELECT med_details.med_id,
                med_details.name,
                med_details.used,
@@ -394,18 +416,18 @@ def smedicine(request):
                med_details.pres,
                med_details.pack,
                med_details.image,
-               COALESCE(AVG(review.rating), 0) AS rate
+               COALESCE(AVG(review.rating), 0) AS rate,
+               COUNT(review.rid) AS rcount
         FROM med_details
         LEFT JOIN review ON review.med_id = med_details.med_id
-        WHERE med_details.used LIKE '%{med}%'
-           OR med_details.name LIKE '%{med}%'
+        WHERE med_details.used LIKE %s
+           OR med_details.name LIKE %s
         GROUP BY med_details.med_id
         ORDER BY rate DESC
         LIMIT 20;
     """
-
-    print(s)
-    cursor.execute(s)
+    like = '%' + med + '%'
+    cursor.execute(s, [like, like])
     rs = cursor.fetchall()
     tk = []
     for row in rs:
@@ -420,11 +442,13 @@ def smedicine(request):
             'pres': row[7],
             'pack': row[8],
             'image': row[9],
-            'rating': row[10]
+            'rating': row[10],
+            'rcount': row[11],
+            'filled_stars': _stars(row[10])
         }
         tk.append(q)
 
-    return render(request, 'vmedicine.html', {'tk': tk})
+    return render(request, 'vmedicine.html', {'tk': tk, 'query': med})
 
 
 
@@ -435,7 +459,6 @@ def review(request):
     cursor = connection.cursor()
     uid = request.session["uid"]
     na = request.GET['mid']
-    # dt = request.GET['date']
     re = request.GET['review']
 
     ##############################################
@@ -443,7 +466,6 @@ def review(request):
     cursor.execute(sql2)
     ################post tag & stop words  ######################
     txt = request.GET["review"]
-    txtstring = txt
     tokenized = sent_tokenize(txt)
     for i in tokenized:
         wordsList1 = nltk.word_tokenize(i)
@@ -452,8 +474,8 @@ def review(request):
         tagged = [(word, tag) for word, tag in tagged1 if (
             tag == 'NN' or tag == 'NNS' or tag == 'NNP' or tag == 'NNPS' or tag == 'JJ' or tag == 'JJR' or tag == 'JJS' or tag == 'VB' or tag == 'VBD' or tag == 'VBG' or tag == 'VBN' or tag == 'VBP' or tag == 'VBZ')]
         for f, g in tagged1:
-            sql = "insert into postag(data) values('%s')" % (f)
-            cursor.execute(sql)
+            sql = "insert into postag(data) values(%s)"
+            cursor.execute(sql, [f])
     you = []
     sql3 = "select * from postag"
     cursor.execute(sql3)
@@ -466,16 +488,11 @@ def review(request):
     #######stemming####
     ps = PorterStemmer()
     words = word_tokenize(sentence)
-    w1 = []
-    w2 = ''
     sql2 = "truncate table stemming"
     cursor.execute(sql2)
     for w in words:
-        sql = "insert into stemming(data) values('%s')" % (ps.stem(w))
-        cursor.execute(sql)
-        w1.append(ps.stem(w))
-        print(w, " : ", ps.stem(w))
-    w2 = ' '.join(w1)
+        sql = "insert into stemming(data) values(%s)"
+        cursor.execute(sql, [ps.stem(w)])
 
     #############posword
     sql2 = "truncate table pword"
@@ -489,15 +506,8 @@ def review(request):
         result1 = cursor.fetchall()
         for row1 in result1:
             if(row[1] in row1[1]):
-                sql = "insert into pword(pword) values('%s')" % (row[1])
-                cursor.execute(sql)
-    sqlp = "select * from pword "
-    cursor.execute(sqlp)
-    c1 = cursor.fetchall()
-    p = []
-    for r in c1:
-        f = {'data': r[1]}
-        p.append(f)
+                sql = "insert into pword(pword) values(%s)"
+                cursor.execute(sql, [row[1]])
 
     ############negword
 
@@ -512,18 +522,10 @@ def review(request):
         result1 = cursor.fetchall()
         for row1 in result1:
             if(row[1] == row1[1]):
-                sql = "insert into nword(nword) values('%s')" % (row[1])
-                cursor.execute(sql)
+                sql = "insert into nword(nword) values(%s)"
+                cursor.execute(sql, [row[1]])
 
-    sqlp = "select * from nword "
-    cursor.execute(sqlp)
-    c1 = cursor.fetchall()
-    p = []
-    for r in c1:
-        f = {'data': r[1]}
-        p.append(f)
-
-    ##################score
+    ##################score & result
 
     sqlp = "select count(*) from pword "
     cursor.execute(sqlp)
@@ -535,64 +537,30 @@ def review(request):
     n1 = cursor.fetchall()
     for r in n1:
         ncount = r[0]
-    pscore = float(pcount) / (float(pcount) + float(ncount))
-    negscore = float(ncount) / (float(pcount) + float(ncount))
-    sentiscore = (float(pcount) - float(ncount)) / (float(pcount) + float(ncount))
-    data = []
-    s1 = "positive count=" + str(pscore) + "\n"
-    s2 = "negative count=" + str(negscore) + "\n"
-    s3 = "sentimental count=" + str(sentiscore) + "\n"
-    w = {'data': s1}
-    data.append(w)
-    w1 = {'data': s2}
-    data.append(w1)
-    w2 = {'data': s3}
-    data.append(w2)
 
-    ###########result
-
-    sqlp = "select count(*) from pword "
-    cursor.execute(sqlp)
-    p1 = cursor.fetchall()
-    for r in p1:
-        pcount = r[0]
-    sqlp = "select count(*) from nword "
-    cursor.execute(sqlp)
-    n1 = cursor.fetchall()
-    for r in n1:
-        ncount = r[0]
-    count = float(pcount) + float(ncount)
-    sentiscore = (float(pcount) - float(ncount)) / (float(pcount) + float(ncount))
-    avgcount = sentiscore / float(count)
-    # return HttpResponse(avgcount)
-    if (avgcount > 0.25):
-        sentilabel = 5
-        sql = "insert into review(uid,med_id,date,review,rating)values('%s','%s','%s','%s','%s')" % (
-            uid, na, today, re, sentilabel)
-        cursor.execute(sql)
-    elif (avgcount < 0.25 and avgcount > 0.00):
-        sentilabel = 4
-        sql = "insert into review(uid,med_id,date,review,rating)values('%s','%s','%s','%s','%s')" % (
-            uid, na, today, re, sentilabel)
-        cursor.execute(sql)
-    elif (avgcount == -0.25):
-        sentilabel = 2
-        sql = "insert into review(uid,med_id,date,review,rating)values('%s','%s','%s','%s','%s')" % (
-            uid, na, today, re, sentilabel)
-        cursor.execute(sql)
-    elif (avgcount < 0.25):
-        sentilabel = 1
-        sql = "insert into review(uid,med_id,date,review,rating)values('%s','%s','%s','%s','%s')" % (
-            uid, na, today, re, sentilabel)
-        cursor.execute(sql)
-    else:
+    total = float(pcount) + float(ncount)
+    if total == 0:
+        # no sentiment-bearing words matched at all -> neutral, avoid a divide-by-zero
         sentilabel = 3
-        sql = "insert into review(uid,med_id,date,review,rating)values('%s','%s','%s','%s','%s')" % (
-            uid, na, today, re, sentilabel)
-        cursor.execute(sql)
+    else:
+        sentiscore = (float(pcount) - float(ncount)) / total
+        avgcount = sentiscore / total
+        if (avgcount > 0.25):
+            sentilabel = 5
+        elif (avgcount < 0.25 and avgcount > 0.00):
+            sentilabel = 4
+        elif (avgcount == -0.25):
+            sentilabel = 2
+        elif (avgcount < 0.25):
+            sentilabel = 1
+        else:
+            sentilabel = 3
+
+    sql = "insert into review(uid,med_id,date,review,rating) values(%s,%s,%s,%s,%s)"
+    cursor.execute(sql, [uid, na, today, re, sentilabel])
     ###############################################
 
-    msg = "<script>alert('Review Added');window.location='/vmedicine/';</script>"
+    msg = "<script>alert('Review Added');window.location='/meddetail/?mid="+str(na)+"';</script>"
     return HttpResponse(msg)
 
 
@@ -708,41 +676,39 @@ def chat(request):
     cursor=connection.cursor()
     lid=request.GET['lid']
     uid=request.session['uid']
-    cd=today
-    s="select * from chatm  inner join chats on chatm.chatid=chats.chatid where chatm.lid='%s' and chatm.uid='%s'"%(lid,uid)
-    cursor.execute(s)
+    s="select chatm.chatid, chatm.uid, chatm.lid, chatm.chatdate, chats.msgid, chats.msg, chats.typ " \
+      "from chatm inner join chats on chatm.chatid=chats.chatid " \
+      "where chatm.lid=%s and chatm.uid=%s order by chatm.chatdate asc, chats.msgid asc"
+    cursor.execute(s,[lid,uid])
     rs=cursor.fetchall()
     alist=[]
     for r in rs:
         x={'chatid':r[0],'chatdate':r[3],'msg':r[5],'typ':r[6]}
         alist.append(x)
-    return render(request,'chat.html',{'lid':lid,'uid':uid,'alist':alist})
+    docname=lid
+    s2="select name from doctor where doc_id=%s"
+    cursor.execute(s2,[lid])
+    rd=cursor.fetchone()
+    if rd:
+        docname=rd[0]
+    return render(request,'chat.html',{'lid':lid,'uid':uid,'alist':alist,'docname':docname})
 
 def chataction(request):
     cursor=connection.cursor()
     uid=request.session['uid']
     lid=request.GET['lid']
-    # print(lid)
     msg=request.GET['msg']
-    ss="select * from chatm where uid= '%s' and lid='%s' and chatdate='%s'"%(uid,lid,today)
-    cursor.execute(ss)
-    if(cursor.rowcount>0):
-        ss="select max(chatid) as chatid from chatm"
-        cursor.execute(ss)
-        rss=cursor.fetchall()
-        for row in rss:
-            chid=row[0]
-            sql="insert into chats(chatid,msg,typ)values('%s','%s','user')"%(chid,msg)
-            cursor.execute(sql)
+    ss="select chatid from chatm where uid=%s and lid=%s and chatdate=%s"
+    cursor.execute(ss,[uid,lid,today])
+    row=cursor.fetchone()
+    if row:
+        chid=row[0]
     else:
-        sql1="insert into chatm(uid,lid,chatdate) values('%s','%s','%s')"%(uid,lid,today)
-        cursor.execute(sql1)
-        sql2="select max(chatid) as chatid from chatm"
-        cursor.execute(sql2)
-        output=cursor.fetchall()
-        for row in output:
-            sql1="insert into chats(chatid,msg,typ)values('%s','%s','user')"%(row[0],msg)
-            cursor.execute(sql1)
+        sql1="insert into chatm(uid,lid,chatdate) values(%s,%s,%s)"
+        cursor.execute(sql1,[uid,lid,today])
+        chid=cursor.lastrowid
+    sql="insert into chats(chatid,msg,typ)values(%s,%s,'user')"
+    cursor.execute(sql,[chid,msg])
     msg="<script>;window.location='/chat?lid="+lid+"';</script>"
     return HttpResponse(msg)
 
@@ -764,41 +730,39 @@ def dchat(request):
     cursor=connection.cursor()
     lid=request.session['uid']
     uid=request.GET['uid']
-    
-    cd=today
-    s="select * from chatm  inner join chats on chatm.chatid=chats.chatid where chatm.lid='%s' and chatm.uid='%s' order by chatdate asc"%(lid,uid)
-    cursor.execute(s)
+    s="select chatm.chatid, chatm.uid, chatm.lid, chatm.chatdate, chats.msgid, chats.msg, chats.typ " \
+      "from chatm inner join chats on chatm.chatid=chats.chatid " \
+      "where chatm.lid=%s and chatm.uid=%s order by chatm.chatdate asc, chats.msgid asc"
+    cursor.execute(s,[lid,uid])
     rs=cursor.fetchall()
     alist=[]
     for r in rs:
         x={'chatid':r[0],'chatdate':r[3],'msg':r[5],'typ':r[6]}
         alist.append(x)
-    return render(request,'dchat.html',{'uid':uid,'lid':lid,'alist':alist})
+    patname=uid
+    s2="select uname from user where uid=%s"
+    cursor.execute(s2,[uid])
+    rp=cursor.fetchone()
+    if rp:
+        patname=rp[0]
+    return render(request,'dchat.html',{'uid':uid,'lid':lid,'alist':alist,'patname':patname})
 
 def dchataction(request):
     cursor=connection.cursor()
     lid=request.session['uid']
     uid=request.GET['uid']
     msg=request.GET['msg']
-    ss="select * from chatm where uid='%s' and lid='%s' and chatdate='%s'"%(uid,lid,today)
-    cursor.execute(ss)
-    if(cursor.rowcount>0):
-        ss="select max(chatid) as chatid from chatm"
-        cursor.execute(ss)
-        rss=cursor.fetchall()
-        for row in rss:
-            chid=row[0]
-            sql="insert into chats(chatid,msg,typ)values('%s','%s','doctor')"%(chid,msg)
-            cursor.execute(sql)
+    ss="select chatid from chatm where uid=%s and lid=%s and chatdate=%s"
+    cursor.execute(ss,[uid,lid,today])
+    row=cursor.fetchone()
+    if row:
+        chid=row[0]
     else:
-        sql1="insert into chatm(lid,uid,chatdate) values('%s','%s','%s')"%(lid,uid,today)
-        cursor.execute(sql1)
-        sql2="SELECT max(chatid) as chatid from chatm"
-        cursor.execute(sql2)
-        output=cursor.fetchall()
-        for row in output:
-            sql1="insert into chats(chatid,msg,typ)values('%s','%s','doctor')"%(row[0],msg)
-            cursor.execute(sql1)
+        sql1="insert into chatm(lid,uid,chatdate) values(%s,%s,%s)"
+        cursor.execute(sql1,[lid,uid,today])
+        chid=cursor.lastrowid
+    sql="insert into chats(chatid,msg,typ)values(%s,%s,'doctor')"
+    cursor.execute(sql,[chid,msg])
     msg="<script>;window.location='/dchat?uid="+uid+"';</script>"
     return HttpResponse(msg)
     

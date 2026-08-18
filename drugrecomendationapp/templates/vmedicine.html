@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Drug Recommender</title>
+    <title>Medicines - Drug Recommender</title>
 
     <!-- CSS FILES -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -41,10 +41,6 @@
             margin: 0;
         }
 
-        /* .navbar a:hover, .dropdown:hover .dropbtn {
-          background-color: red;
-        } */
-
         .dropdown-content {
             display: none;
             position: absolute;
@@ -70,6 +66,158 @@
         .dropdown:hover .dropdown-content {
             display: block;
         }
+
+        /* ---- Search box ---- */
+        .med-search-form {
+            max-width: 620px;
+            margin: 1.6rem auto 0;
+            display: flex;
+            background: #fff;
+            border-radius: 50px;
+            padding: 6px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+        }
+
+        .med-search-form input[type="text"] {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 0.7rem 1.2rem;
+            font-size: 1rem;
+            border-radius: 50px;
+            color: #333;
+        }
+
+        .med-search-form button {
+            background: var(--accent-blue);
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            padding: 0 1.6rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .med-search-form button:hover {
+            background: var(--accent-blue-dark);
+        }
+
+        /* ---- Medicine cards ---- */
+        .med-section {
+            padding: 3.5rem 0;
+            background: var(--section-bg-color);
+        }
+
+        .med-section-title {
+            font-weight: 800;
+            margin-bottom: 0.3rem;
+        }
+
+        .med-section-sub {
+            color: var(--p-color);
+            margin-bottom: 2.2rem;
+        }
+
+        .med-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 18px rgba(15, 42, 67, 0.08);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+
+        .med-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 26px rgba(15, 42, 67, 0.14);
+        }
+
+        .med-card-top {
+            padding: 1.3rem 1.3rem 0.9rem;
+        }
+
+        .med-card-name {
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: var(--news-title-color, #292828);
+            margin-bottom: 0.15rem;
+        }
+
+        .med-card-used {
+            font-size: 0.85rem;
+            color: var(--p-color);
+            margin-bottom: 0.7rem;
+        }
+
+        .med-stars i {
+            color: #E3A008;
+            font-size: 0.95rem;
+        }
+
+        .med-stars .bi-star {
+            color: #D9D9D9;
+        }
+
+        .med-rcount {
+            font-size: 0.78rem;
+            color: var(--p-color);
+            margin-left: 0.3rem;
+        }
+
+        .med-card-meta {
+            padding: 0 1.3rem;
+            font-size: 0.82rem;
+            color: var(--p-color);
+            flex-grow: 1;
+        }
+
+        .med-card-meta span {
+            display: inline-block;
+            background: var(--section-bg-color);
+            border-radius: 20px;
+            padding: 2px 10px;
+            margin: 0 4px 6px 0;
+        }
+
+        .med-card-btn {
+            display: block;
+            text-align: center;
+            margin: 1rem 1.3rem 1.3rem;
+            background: var(--accent-blue);
+            color: #fff !important;
+            border-radius: 8px;
+            padding: 0.55rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+        }
+
+        .med-card-btn:hover {
+            background: var(--accent-blue-dark);
+        }
+
+        .med-empty {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--p-color);
+        }
+
+        .med-empty i {
+            font-size: 2.4rem;
+            color: var(--border-color);
+            display: block;
+            margin-bottom: 0.8rem;
+        }
+
+        .med-clear-search {
+            display: inline-block;
+            margin-bottom: 1.6rem;
+            font-size: 0.85rem;
+        }
     </style>
 </head>
 
@@ -87,18 +235,16 @@
                 <span>Drug Recommender</span>
             </a>
 
-          
-
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav mx-auto">
                        <li class="nav-item">
-                        <a class="nav-link active" href="/userhome/">Home</a>
+                        <a class="nav-link" href="/userhome/">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/userupdate/">Profile</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/vmedicine/">Medicines</a>
+                        <a class="nav-link active" href="/vmedicine/">Medicines</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/doctorlist/">Doctors</a>
@@ -106,16 +252,12 @@
                      <li class="nav-item">
                         <a class="nav-link" href="/givefeedback/">Add Review</a>
                     </li>
-                   
                 </ul>
             </div>
 
-
             <div class="d-none d-lg-block">
-                <button type="button" class="custom-btn btn btn-danger" data-bs-toggle="modal"><a href="/index/"
-                        style="color: white;">Logout</a></button>
+                <a href="/index/" class="custom-btn btn btn-danger" style="color: white;">Logout</a>
             </div>
-
         </div>
     </nav>
 
@@ -124,31 +266,81 @@
         <header class="site-header site-contact-header">
             <div class="container">
                 <div class="row">
+                    <div class="col-lg-10 col-12 mx-auto text-center">
+                        <h1 class="text-white">Medicines</h1>
+                        <p class="text-white mb-0" style="opacity:.85">Ranked by our sentiment-analysis engine from real patient reviews</p>
 
-                    <div class="col-lg-10 col-12 mx-auto">
-                        <h1 class="text-white">Medicine</h1>
-
-                        <form  action="/smedicine/">
-                            Search for Medicine <input type="text" name="med" placeholder="Search..." required>
-                            <input type="submit" value="Search">
-                            <!-- <a href="/searchmedicine?id={{u.med_id}}">search</a> -->
-                        
+                        <form class="med-search-form" action="/smedicine/" method="get">
+                            <input type="text" name="med" placeholder="Search by medicine name or what it's used for..." value="{{ query|default:'' }}" required>
+                            <button type="submit"><i class="bi bi-search"></i> Search</button>
                         </form>
                     </div>
-
                 </div>
             </div>
 
             <div class="overlay"></div>
         </header>
-        {% include 'news_section.html' %}
 
-        </main>
+        <section class="med-section">
+            <div class="container">
+
+                {% if query %}
+                    <h2 class="med-section-title">Results for &ldquo;{{ query }}&rdquo;</h2>
+                    <p class="med-section-sub">Sorted by average patient rating, highest first.</p>
+                    <a href="/vmedicine/" class="med-clear-search"><i class="bi bi-x-circle"></i> Clear search &amp; view all medicines</a>
+                {% else %}
+                    <h2 class="med-section-title">AI-Recommended Medicines</h2>
+                    <p class="med-section-sub">Every review is scored by our NLTK sentiment-analysis engine — higher-rated medicines are listed first automatically.</p>
+                {% endif %}
+
+                {% if tk %}
+                <div class="row g-4">
+                    {% for t in tk %}
+                    <div class="col-lg-4 col-md-6">
+                        <div class="med-card">
+                            <div class="med-card-top">
+                                <div class="med-card-name">{{ t.name }}</div>
+                                <div class="med-card-used">Used for: {{ t.used }}</div>
+                                <div class="med-stars">
+                                    {% for i in "12345" %}
+                                        {% if forloop.counter <= t.filled_stars %}
+                                            <i class="bi bi-star-fill"></i>
+                                        {% else %}
+                                            <i class="bi bi-star"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                    <span class="med-rcount">
+                                        {% if t.rcount %}({{ t.rcount }} review{{ t.rcount|pluralize }}){% else %}No reviews yet{% endif %}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="med-card-meta">
+                                <span>{{ t.mg }} mg</span>
+                                <span>{{ t.pres }}</span>
+                                <span>Pack: {{ t.pack }}</span>
+                            </div>
+                            <a href="/meddetail/?mid={{ t.med_id }}" class="med-card-btn">View Details &amp; Reviews</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="med-empty">
+                    <i class="bi bi-inbox"></i>
+                    {% if query %}
+                        No medicines matched &ldquo;{{ query }}&rdquo;. Try a different search term.
+                    {% else %}
+                        No medicines have been added yet.
+                    {% endif %}
+                </div>
+                {% endif %}
+
+            </div>
+        </section>
+
+    </main>
 
     {% include 'footer.html' %}
-
-    <!-- Modal -->
-
 
     <!-- JAVASCRIPT FILES -->
     <script src="/static/js/jquery.min.js"></script>
@@ -158,5 +350,3 @@
 </body>
 
 </html>
-   
-   
